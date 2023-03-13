@@ -275,8 +275,8 @@ class WordExtractor:
         return bool(
             (next_char["x0"] > word_x1 + intraline_tol)
             or (next_char["x1"] < word_x0 - intraline_tol)
-            or (next_char["top"] > word_bottom + interline_tol)
-            or (next_char["bottom"] < word_top - interline_tol)
+            or (next_char["top"] > word_bottom - interline_tol)
+            or (next_char["bottom"] < word_top + interline_tol)
         )
 
     def iter_chars_to_words(
