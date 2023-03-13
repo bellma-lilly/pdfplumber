@@ -266,6 +266,8 @@ def filter_edges(
     orientation: Optional[str] = None,
     edge_type: Optional[str] = None,
     min_length: T_num = 1,
+    x_tolerance: T_num = 2,
+    y_tolerance: T_num = 2
 ) -> T_obj_list:
 
     if orientation not in ("v", "h", None):
@@ -274,6 +276,11 @@ def filter_edges(
     def test(e: T_obj) -> bool:
         dim = "height" if e["orientation"] == "v" else "width"
         et_correct = e["object_type"] == edge_type if edge_type is not None else True
+        if(edge_type == "line" and e["object_type"] == 'rect_edge'):
+            #maybe this rect is meant to be a line if the width is small
+            if(max([p[0] for p in e['pts']]) - min([p[0] for p in e['pts']]) < x_tolerance or
+               max([p[1] for p in e['pts']]) - min([p[1] for p in e['pts']]) < y_tolerance):
+                et_correct = True
         orient_correct = orientation is None or e["orientation"] == orientation
         return bool(et_correct and orient_correct and (e[dim] >= min_length))
 
